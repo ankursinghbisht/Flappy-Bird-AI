@@ -64,7 +64,7 @@ class Bird:
             if self.tilt>-90: #it decreases the value till it shows the bird nosediving
                 self.tilt-=self.ROTATION_VELOCITY
     
-    def draw (self, win):
+    def draw (self, window):
         #selecting which frame of bird to present
         self.image_number+=1
         
@@ -79,7 +79,7 @@ class Bird:
         elif self.image_number<self.ANIMATION_TIME*4+1:
             self.image=self.IMAGE[0]
             self.image_number=0
-        
+
         '''
         above loop was used to set animation for bird ,by showing 1st frame to 2nd to 3rd,(rather than going directly to 1st frame, looking odd animation) , we go from frame 2nd to 1st 
         '''
@@ -88,3 +88,19 @@ class Bird:
             self.image=self.IMAGE[1]
             self.image_number=self.ANIMATION_TIME*2
             #when bird nosedive , it shouldn't flap it's bird, 2nd frame is used and then transferred to 3rd frame and cycles continues
+
+        #rotating the image wrt angle, by default the image is rotated with it's top left pixel, changin it using get_rect
+        rotated_image=pygame.transform.rotate(self.image,self.tilt)
+        new_rect=rotated_image.get_rect(center=self.image.get_rect(topleft=(self.x,self.y)).center)
+
+        window.blit(rotated_image,new_rect.topleft)
+        #blit is used to combine or display images onto the game window
+
+    def get_mask(self):
+        return pygame.mask.from_surface(self.image)
+
+def draw_window(window,bird):
+    window.blit(BACKGROUND,(0,0))
+    bird.draw(window)
+    pygame.display.update()
+
