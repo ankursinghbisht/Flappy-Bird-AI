@@ -5,8 +5,8 @@ import neat
 import pygame
 
 #setting up the resolution
-HEIGHT=800
-WIDTH=600
+HEIGHT=768
+WIDTH=576
 
 #loading the images using pygame, scale2x doubles the size of image
 BIRD_IMAGE=[pygame.transform.scale2x(pygame.image.load(os.path.join("Images","bird1.png"))),pygame.transform.scale2x(pygame.image.load(os.path.join("Images","bird2.png"))),pygame.transform.scale2x(pygame.image.load(os.path.join("Images","bird3.png")))]
@@ -104,3 +104,16 @@ def draw_window(window,bird):
     bird.draw(window)
     pygame.display.update()
 
+def main():
+    bird =Bird(200,200) #setting starting position
+    window=pygame.display.set_mode((WIDTH,HEIGHT)) #setting up the game window
+    run= True #setting this true till we want to continue the game
+    while run:
+        for event in pygame.event.get(): #used to retrieve a list of all the events that have occurred
+            if event.type==pygame.QUIT:
+                run=False
+        draw_window(window, bird)
+    pygame.quit()
+    quit()
+
+main()
