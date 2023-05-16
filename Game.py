@@ -4,9 +4,10 @@ import time
 import neat
 import pygame
 
+pygame.font.init()
 # setting up the resolution
-HEIGHT = 768
-WIDTH = 576
+HEIGHT = 800
+WIDTH = 575
 
 # loading the images using pygame, scale2x doubles the size of image
 BIRD_IMAGE = [
@@ -23,6 +24,7 @@ GROUND_IMAGE = pygame.transform.scale2x(
 BACKGROUND = pygame.transform.scale2x(
     pygame.image.load(os.path.join("Images", "bg.png"))
 )
+STAT_FONT = pygame.font.SysFont("comicsans", 60)
 
 
 # declaring the class   bird to control the character
@@ -93,7 +95,8 @@ class Bird:
             self.image_number = 0
 
         """
-        above loop was used to set animation for bird ,by showing 1st frame to 2nd to 3rd,(rather than going directly to 1st frame, looking odd animation) , we go from frame 2nd to 1st 
+        above loop was used to set animation for bird ,by showing 1st frame to 2nd to 3rd,(rather than going directly to 1st frame,
+        looking odd animation) , we go from frame 2nd to 1st 
         """
 
         if self.tilt <= -80:
@@ -141,7 +144,7 @@ class Pipe:
         self.top = self.height - self.PIPE_TOP.get_height()
         # by default pygame takes top left of image as it's origin, it'll work with bottom pipe ,
         # but we need to find the difference b/w height and height of image to find top of top pipe
-        self.bottom = self.height(self.GAP)
+        self.bottom = self.height + self.GAP
 
     def move(self):
         self.x -= self.VELOCITY
@@ -185,8 +188,8 @@ class Base:
         self.x2 = self.WIDTH
 
     def move(self):
-        self.x1 = self.VELOCITY
-        self.x2 = self.VELOCITY
+        self.x1 -= self.VELOCITY
+        self.x2 -= self.VELOCITY
 
         # to check  the corresponding ground image has moved completely off the screen to the left.
         if self.x1 + self.WIDTH < 0:
@@ -201,30 +204,96 @@ class Base:
         windows.blit(self.IMG, (self.x2, self.y))
 
 
-def draw_window(window, bird):
+# drawing the game window with all game objects
+def draw_window(window, bird, pipes, base, score):
     window.blit(BACKGROUND, (0, 0))
+
+    for pipe in pipes:
+        pipe.draw(window)
+    base.draw(window)
+
+    text = STAT_FONT.render("Score:" + str(score), 1, (255, 255, 255))
+    window.blit(text, (WIDTH - 10 - text.get_width(), 10))
+
     bird.draw(window)
     pygame.display.update()
 
 
 def game():
-    bird = Bird(200, 200)  # setting starting position
-    window = pygame.display.set_mode((WIDTH, HEIGHT))  # setting up the game window
-    run = True  # setting this true till we want to continue the game
+    bird = Bird(230, 350)
+    ground = Base(700)
+    pipes = [Pipe(600)]
+    score = 0
+
+    window = pygame.display.set_mode((WIDTH, HEIGHT))
     clock = pygame.time.Clock()
+    mouse_clicked = False
+    game_over = False
 
+    run = True
     while run:
-        clock.tick(30)  # setting the frame rate of game
+        clock.tick(30)
 
-        for (
-            event
-        ) in (
-            pygame.event.get()
-        ):  # used to retrieve a list of all the events that have occurred
+        for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
-        bird.move()
-        draw_window(window, bird)  # setting up the window with bird and background
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:  # Left mouse button
+                    if game_over:
+                        # Restart the game
+                        game_over = False
+                        bird = Bird(230, 350)
+                        pipes = [Pipe(600)]
+                        score = 0
+                    else:
+                        # Set the flag to indicate left mouse button is clicked
+                        mouse_clicked = True
+
+        if not game_over:
+            bird.move()
+
+            add_pipe = False
+            rem = []
+            for pipe in pipes:
+                if pipe.collide(bird):
+                    # Bird collided with a pipe, game over
+                    game_over = True
+
+                if pipe.x + pipe.PIPE_TOP.get_width() < 0:
+                    # Pipe has moved off the screen, add it to removal list
+                    rem.append(pipe)
+                if not pipe.passed and pipe.x < bird.x:
+                    # Bird has passed the pipe
+                    pipe.passed = True
+                    add_pipe = True
+
+                pipe.move()
+
+            if add_pipe:
+                # Increase the score and add a new pipe
+                score += 1
+                pipes.append(Pipe(600))
+
+            for r in rem:
+                # Remove pipes that have moved off the screen
+                pipes.remove(r)
+
+            if bird.y + bird.image.get_height() >= ground.y:
+                # Bird collided with the ground, game over
+                game_over = True
+
+            ground.move()
+
+            if mouse_clicked:
+                # Bird jumps when left mouse button is clicked
+                bird.jump()
+                mouse_clicked = False
+
+        if bird.y <= 0:
+            # Limit the bird's upward movement at the top of the screen
+            bird.y = 0
+
+        draw_window(window, bird, pipes, ground, score)
 
     pygame.quit()
     quit()
