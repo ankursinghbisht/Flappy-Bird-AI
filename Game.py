@@ -173,6 +173,34 @@ class Pipe:
         return False
 
 
+class Base:
+    VELOCITY = 5
+    WIDTH = GROUND_IMAGE.get_width()
+    IMG = GROUND_IMAGE
+
+    def __init__(self, y):
+        # setting up 2 images of background in order to loop
+        self.y = y
+        self.x1 = 0
+        self.x2 = self.WIDTH
+
+    def move(self):
+        self.x1 = self.VELOCITY
+        self.x2 = self.VELOCITY
+
+        # to check  the corresponding ground image has moved completely off the screen to the left.
+        if self.x1 + self.WIDTH < 0:
+            # placing the first ground image just to the right of the second ground image.
+            self.x1 = self.x2 + self.WIDTH
+        if self.x2 + self.WIDTH < 0:
+            # placing the second ground image just to the right of the first ground image.
+            self.x2 = self.x1 + self.WIDTH
+
+    def draw(self, windows):
+        windows.blit(self.IMG, (self.x1, self.y))
+        windows.blit(self.IMG, (self.x2, self.y))
+
+
 def draw_window(window, bird):
     window.blit(BACKGROUND, (0, 0))
     bird.draw(window)
