@@ -79,25 +79,20 @@ class Bird:
                 self.tilt -= self.ROTATION_VELOCITY
 
     def draw(self, window):
-        # selecting which frame of bird to present
+        # calculalting which frame to show using animation time & frame number ( here mentioned as image_number )
         self.image_number += 1
+        animation_frame = (
+            self.image_number // self.ANIMATION_TIME % (2 * len(self.IMAGE) - 2)
+        )
 
-        if self.image_number < self.ANIMATION_TIME:
-            self.image = self.IMAGE[0]
-        elif self.image_number < self.ANIMATION_TIME * 2:
-            self.image = self.IMAGE[1]
-        elif self.image_number < self.ANIMATION_TIME * 3:
-            self.image = self.IMAGE[2]
-        elif self.image_number < self.ANIMATION_TIME * 4:
-            self.image = self.IMAGE[1]
-        elif self.image_number < self.ANIMATION_TIME * 4 + 1:
-            self.image = self.IMAGE[0]
-            self.image_number = 0
+        # it outputs image number of bird as 0,1,2,1,0... ( required for animation )
+        if animation_frame < len(self.IMAGE):
+            self.image = self.IMAGE[animation_frame]
+        else:
+            self.image = self.IMAGE[2 * len(self.IMAGE) - 2 - animation_frame]
 
-        """
-        above loop was used to set animation for bird ,by showing 1st frame to 2nd to 3rd,(rather than going directly to 1st frame,
-        looking odd animation) , we go from frame 2nd to 1st 
-        """
+        # above loop was used to set animation for bird ,by showing 1st frame to 2nd to 3rd,(rather than going directly to 1st frame,
+        # looking odd animation) , we go from frame 2nd to 1st
 
         if self.tilt <= -80:
             self.image = self.IMAGE[1]
