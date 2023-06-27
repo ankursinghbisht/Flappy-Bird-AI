@@ -10,18 +10,16 @@ HEIGHT = 800
 WIDTH = 575
 
 # loading the images using pygame, scale2x doubles the size of image
-BIRD_IMAGE = [
-    pygame.transform.scale2x(pygame.image.load(os.path.join("Images", "bird1.png"))),
+BIRD_IMAGE = [pygame.transform.scale2x(pygame.image.load(os.path.join("Images", "bird1.png"))),
     pygame.transform.scale2x(pygame.image.load(os.path.join("Images", "bird2.png"))),
-    pygame.transform.scale2x(pygame.image.load(os.path.join("Images", "bird3.png")))
-    ]
+    pygame.transform.scale2x(pygame.image.load(os.path.join("Images", "bird3.png")))]
+
 PIPE_IMAGE = pygame.transform.scale2x(pygame.image.load(os.path.join("Images", "pipe.png")))
 
 GROUND_IMAGE = pygame.transform.scale2x(pygame.image.load(os.path.join("Images", "base.png")))
 
 BACKGROUND = pygame.transform.scale2x(pygame.image.load(os.path.join("Images", "bg.png")))
 
-STAT_FONT = pygame.font.SysFont("comicsans", 60)
 
 
 # declaring the class   bird to control the character
@@ -216,6 +214,7 @@ def game():
     score = 0
 
     window = pygame.display.set_mode((WIDTH, HEIGHT))
+    pygame.display.set_caption("Flappy Bird")
     clock = pygame.time.Clock()
     mouse_clicked = False
     game_over = False
