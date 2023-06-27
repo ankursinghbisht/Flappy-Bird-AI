@@ -115,8 +115,8 @@ class Bird:
 
 
 class Pipe:
-    GAP = 200
-    VELOCITY = 5
+    GAP = 200  # gap between each pipe
+    VELOCITY = 5  # velocity of pipes
 
     def __init__(self, x):
         # setting the x axis value of pipe, as height with will random
@@ -143,6 +143,7 @@ class Pipe:
 
     def move(self):
         self.x -= self.VELOCITY
+        # moving the pipe with define velocity variable
 
     # presenting both pipes with their coordinates
     def draw(self, window):
@@ -207,10 +208,15 @@ def draw_window(window, bird, pipes, base, score):
         pipe.draw(window)
     base.draw(window)
 
-    text = STAT_FONT.render("Score:" + str(score), 1, (255, 255, 255))
-    window.blit(text, (WIDTH - 10 - text.get_width(), 10))
-
     bird.draw(window)
+
+    font_path = "flappy-bird-font.ttf"
+    font_size = 75
+    font = pygame.font.Font(font_path, font_size)
+    font.set_bold(True)
+    text = font.render(str(score), 1, (255, 255, 255))
+    window.blit(text, (WIDTH / 2 - text.get_width(), 100))
+
     pygame.display.update()
 
 
