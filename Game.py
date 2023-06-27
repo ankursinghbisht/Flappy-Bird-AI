@@ -13,17 +13,14 @@ WIDTH = 575
 BIRD_IMAGE = [
     pygame.transform.scale2x(pygame.image.load(os.path.join("Images", "bird1.png"))),
     pygame.transform.scale2x(pygame.image.load(os.path.join("Images", "bird2.png"))),
-    pygame.transform.scale2x(pygame.image.load(os.path.join("Images", "bird3.png"))),
-]
-PIPE_IMAGE = pygame.transform.scale2x(
-    pygame.image.load(os.path.join("Images", "pipe.png"))
-)
-GROUND_IMAGE = pygame.transform.scale2x(
-    pygame.image.load(os.path.join("Images", "base.png"))
-)
-BACKGROUND = pygame.transform.scale2x(
-    pygame.image.load(os.path.join("Images", "bg.png"))
-)
+    pygame.transform.scale2x(pygame.image.load(os.path.join("Images", "bird3.png")))
+    ]
+PIPE_IMAGE = pygame.transform.scale2x(pygame.image.load(os.path.join("Images", "pipe.png")))
+
+GROUND_IMAGE = pygame.transform.scale2x(pygame.image.load(os.path.join("Images", "base.png")))
+
+BACKGROUND = pygame.transform.scale2x(pygame.image.load(os.path.join("Images", "bg.png")))
+
 STAT_FONT = pygame.font.SysFont("comicsans", 60)
 
 
@@ -73,17 +70,13 @@ class Bird:
                 self.tilt = self.MAX_ROTATION
         else:
             # now when bird is not moving upwards, it'll be falling downwards
-            if (
-                self.tilt > -90
-            ):  # it decreases the value till it shows the bird nosediving
+            if (self.tilt > -90):  # it decreases the value till it shows the bird nosediving
                 self.tilt -= self.ROTATION_VELOCITY
 
     def draw(self, window):
         # calculalting which frame to show using animation time & frame number ( here mentioned as image_number )
         self.image_number += 1
-        animation_frame = (
-            self.image_number // self.ANIMATION_TIME % (2 * len(self.IMAGE) - 2)
-        )
+        animation_frame = (self.image_number // self.ANIMATION_TIME % (2 * len(self.IMAGE) - 2))
 
         # it outputs image number of bird as 0,1,2,1,0... ( required for animation )
         if animation_frame < len(self.IMAGE):
@@ -101,9 +94,7 @@ class Bird:
 
         # rotating the image wrt angle, by default the image is rotated with it's top left pixel, changin it using get_rect
         rotated_image = pygame.transform.rotate(self.image, self.tilt)
-        new_rect = rotated_image.get_rect(
-            center=self.image.get_rect(topleft=(self.x, self.y)).center
-        )
+        new_rect = rotated_image.get_rect(center=self.image.get_rect(topleft=(self.x, self.y)).center)
 
         window.blit(rotated_image, new_rect.topleft)
         # blit is used to combine or display images onto the game window
@@ -161,9 +152,7 @@ class Pipe:
         bottom_pipe_offset = (self.x - bird.x, self.bottom - round(bird.y))
 
         # finding collision points for bottom & top pipe
-        bottom_collision_points = bird_mask.overlap(
-            bottom_pipe_mask, bottom_pipe_offset
-        )
+        bottom_collision_points = bird_mask.overlap(bottom_pipe_mask, bottom_pipe_offset)
         top_collision_points = bird_mask.overlap(top_pipe_mask, top_pipe_offset)
 
         # checking if any point overlapped with pipes, returns true if bird collided with pip
