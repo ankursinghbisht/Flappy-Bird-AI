@@ -202,8 +202,10 @@ def draw_window(window, bird, pipes, base, score):
     font = pygame.font.Font(font_path, font_size)
     font.set_bold(True)
     text = font.render(str(score), 1, (255, 255, 255))
-    window.blit(text, (WIDTH / 2 - text.get_width(), 100))
-
+    
+    text_width = text.get_width() #setting up the text to show in the middle
+    x_pos = WIDTH // 2 - text_width // 2
+    window.blit(text, (x_pos, 100))
     pygame.display.update()
 
 
