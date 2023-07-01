@@ -1,0 +1,132 @@
+# NEAT algorithm configuration file
+
+[NEAT]
+# Fitness settings
+fitness_criterion = max
+# The fitness criterion used to evaluate genomes (max or min)
+fitness_threshold = 100
+# The fitness threshold at which the evolution will stop
+pop_size = 10
+# The population size
+reset_on_extinction = False
+# Whether to reset the population when all species go extinct
+
+[DefaultGenome]
+# Node activation options
+activation_default = tanh
+# Default activation function for nodes
+activation_mutate_rate = 0.0
+# The probability of mutating the activation function of a node
+activation_options = tanh
+# Possible activation function options
+
+# Node aggregation options
+aggregation_default = sum
+# Default aggregation function for nodes
+aggregation_mutate_rate = 0.0
+# The probability of mutating the aggregation function of a node
+aggregation_options = sum
+# Possible aggregation function options
+
+# Node bias options
+bias_init_mean = 0.0
+# The mean value for initializing node biases
+bias_init_stdev = 1.0
+# The standard deviation for initializing node biases
+bias_max_value = 30.0
+# The maximum value for node biases
+bias_min_value = -30.0
+# The minimum value for node biases
+bias_mutate_power = 0.5
+# The power of mutation applied to node biases
+bias_mutate_rate = 0.7
+# The probability of mutating the bias of a node
+bias_replace_rate = 0.1
+# The probability of replacing the bias of a node with a new value
+
+# Genome compatibility options
+compatibility_disjoint_coefficient = 1.0
+# The coefficient for measuring compatibility based on disjoint genes
+compatibility_weight_coefficient = 0.5
+# The coefficient for measuring compatibility based on weight differences
+
+# Connection add/remove rates
+conn_add_prob = 0.5
+# The probability of adding a new connection
+conn_delete_prob = 0.5
+# The probability of deleting an existing connection
+
+# Connection enable options
+enabled_default = True
+# The default state (enabled or disabled) for new connections
+enabled_mutate_rate = 0.01
+# The probability of mutating the enabled state of a connection
+
+feed_forward = True
+# Whether to force the network to be feed-forward
+initial_connection = full
+# The initial connection scheme ("full" or "partial")
+
+# Node add/remove rates
+node_add_prob = 0.2
+# The probability of adding a new node
+node_delete_prob = 0.2
+# The probability of deleting an existing node
+
+# Network parameters
+num_hidden = 0
+# The number of hidden nodes in the network
+num_inputs = 3
+# The number of input nodes in the network
+num_outputs = 1
+# The number of output nodes in the network
+
+# Node response options
+response_init_mean = 1.0
+# The mean value for initializing node response
+response_init_stdev = 0.0
+# The standard deviation for initializing node response
+response_max_value = 30.0
+# The maximum value for node response
+response_min_value = -30.0
+# The minimum value for node response
+response_mutate_power = 0.0
+# The power of mutation applied to node response
+response_mutate_rate = 0.0
+# The probability of mutating the response of a node
+response_replace_rate = 0.0
+# The probability of replacing the response of a node with a new value
+
+# Connection weight options
+weight_init_mean = 0.0
+# The mean value for initializing connection weights
+weight_init_stdev = 1.0
+# The standard deviation for initializing connection weights
+weight_max_value = 30
+# The maximum value for connection weights
+weight_min_value = -30
+# The minimum value for connection weights
+weight_mutate_power = 0.5
+# The power of mutation applied to connection weights
+weight_mutate_rate = 0.8
+# The probability of mutating the weight of a connection
+weight_replace_rate = 0.1
+# The probability of replacing the weight of a connection with a new value
+
+[DefaultSpeciesSet]
+compatibility_threshold = 3.0
+# The threshold for compatibility distance used to determine species
+
+[DefaultStagnation]
+species_fitness_func = max
+# The fitness function used to evaluate species (max or min)
+max_stagnation = 20
+# The maximum number of generations without improvement before a species is considered stagnant
+species_elitism = 2
+# The number of top-performing genomes within each species to preserve
+
+[DefaultReproduction]
+elitism = 2
+# The number of top-performing genomes to preserve through elitism
+survival_threshold = 0.2
+# The percentage of the population allowed to reproduce without modification
