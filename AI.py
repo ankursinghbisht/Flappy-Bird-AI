@@ -8,22 +8,16 @@ pygame.font.init()
 # setting up the resolution
 HEIGHT = 800
 WIDTH = 575
-
+VELOCITY=5
 # loading the images using pygame, scale2x doubles the size of image
 BIRD_IMAGE = [
     pygame.transform.scale2x(pygame.image.load(os.path.join("Images", "bird1.png"))),
     pygame.transform.scale2x(pygame.image.load(os.path.join("Images", "bird2.png"))),
     pygame.transform.scale2x(pygame.image.load(os.path.join("Images", "bird3.png"))),
 ]
-PIPE_IMAGE = pygame.transform.scale2x(
-    pygame.image.load(os.path.join("Images", "pipe.png"))
-)
-GROUND_IMAGE = pygame.transform.scale2x(
-    pygame.image.load(os.path.join("Images", "base.png"))
-)
-BACKGROUND = pygame.transform.scale2x(
-    pygame.image.load(os.path.join("Images", "bg.png"))
-)
+PIPE_IMAGE = pygame.transform.scale2x(pygame.image.load(os.path.join("Images", "pipe.png")))
+GROUND_IMAGE = pygame.transform.scale2x(pygame.image.load(os.path.join("Images", "base.png")))
+BACKGROUND = pygame.transform.scale2x(pygame.image.load(os.path.join("Images", "bg.png")))
 STAT_FONT = pygame.font.SysFont("comicsans", 60)
 
 
@@ -75,17 +69,13 @@ class Bird:
                 self.tilt = self.MAX_ROTATION
         else:
             # now when bird is not moving upwards, it'll be falling downwards
-            if (
-                self.tilt > -90
-            ):  # it decreases the value till it shows the bird nosediving
+            if (self.tilt > -90):  # it decreases the value till it shows the bird nosediving
                 self.tilt -= self.ROTATION_VELOCITY
 
     def draw(self, window):
         # calculalting which frame to show using animation time & frame number ( here mentioned as image_number )
         self.image_number += 1
-        animation_frame = (
-            self.image_number // self.ANIMATION_TIME % (2 * len(self.IMAGE) - 2)
-        )
+        animation_frame = (self.image_number // self.ANIMATION_TIME % (2 * len(self.IMAGE) - 2))
 
         # it outputs image number of bird as 0,1,2,1,0... ( required for animation )
         if animation_frame < len(self.IMAGE):
@@ -117,8 +107,7 @@ class Bird:
 
 class Pipe:
     GAP = 200
-    VELOCITY = 5
-
+    
     def __init__(self, x):
         # setting the x axis value of pipe, as height with will random
         self.x = x
@@ -143,7 +132,7 @@ class Pipe:
         self.bottom = self.height + self.GAP
 
     def move(self):
-        self.x -= self.VELOCITY
+        self.x -=VELOCITY
 
     # presenting both pipes with their coordinates
     def draw(self, window):
@@ -173,7 +162,6 @@ class Pipe:
 
 
 class Base:
-    VELOCITY = 5
     WIDTH = GROUND_IMAGE.get_width()
     IMG = GROUND_IMAGE
 
@@ -184,8 +172,8 @@ class Base:
         self.x2 = self.WIDTH
 
     def move(self):
-        self.x1 -= self.VELOCITY
-        self.x2 -= self.VELOCITY
+        self.x1 -=VELOCITY
+        self.x2 -=VELOCITY
 
         # to check  the first ground image has moved completely off the screen to the left.
         if self.x1 + self.WIDTH < 0:
@@ -228,6 +216,8 @@ def main(genomes, config):
     nets = []
     ge = []
     birds = []
+    
+    global VELOCITY
 
     for _,g in genomes: #genomes is a tuple, with genome id and genome object
         net = neat.nn.FeedForwardNetwork.create(g, config)
@@ -241,7 +231,7 @@ def main(genomes, config):
     pipes = [Pipe(600)]
 
     score = 0  # setting up the score
-
+    frame=0
     window = pygame.display.set_mode((WIDTH, HEIGHT))  # setting up the game window
     run = True  # setting this true till we want to continue the game
     clock = pygame.time.Clock()
@@ -255,6 +245,11 @@ def main(genomes, config):
                 pygame.quit()
                 quit()
 
+        frame+=1
+        if(frame%150==0):
+            frame=0
+        VELOCITY=VELOCITY+VELOCITY*0.0005
+
         pipe_ind=0
         if len(birds)>0:
             if(len(pipes)>1 and  birds[0].x>pipes[0].x +pipes[0].PIPE_TOP.get_width()):
@@ -263,13 +258,14 @@ def main(genomes, config):
             #for multiple pipes in the screen, to select which pipe to feed to the NN 
         else:
             run=False
+            VELOCITY=5
             break #if no bird remain, we want new generation of birds 
 
         for x,bird in enumerate(birds):
             bird.move()
             ge[x].fitness+=0.1 #for surviving each second, we give bird fitness points, ie to incentivise bird to fly longer
 
-            output=nets[x].activate((bird.y,abs(bird.y-pipes[pipe_ind].height),abs(bird.y-pipes[pipe_ind].bottom)))
+            output=nets[x].activate((bird.y,abs(bird.y-pipes[pipe_ind].height),abs(bird.y-pipes[pipe_ind].bottom),VELOCITY))
             #uses the NN to control the bird, giving arguments as position of bird and front pipe
             if (output[0]>0.5):
                 bird.jump() #if output of NN is above threshold, then only jump

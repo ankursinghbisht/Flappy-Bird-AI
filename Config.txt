@@ -4,9 +4,9 @@
 # Fitness settings
 fitness_criterion = max
 # The fitness criterion used to evaluate genomes (max or min)
-fitness_threshold = 100
+fitness_threshold = 1000
 # The fitness threshold at which the evolution will stop
-pop_size = 10
+pop_size = 100
 # The population size
 reset_on_extinction = False
 # Whether to reset the population when all species go extinct
@@ -76,7 +76,7 @@ node_delete_prob = 0.2
 # Network parameters
 num_hidden = 0
 # The number of hidden nodes in the network
-num_inputs = 3
+num_inputs = 4
 # The number of input nodes in the network
 num_outputs = 1
 # The number of output nodes in the network
