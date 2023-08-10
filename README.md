@@ -1,8 +1,9 @@
 
 # Flappy Bird AI
-
-
 Discover the exciting Flappy Bird AI by engaging in the original game experience.
+<img src="https://github.com/ankursinghbisht/Flappy-Bird-AI/assets/112644477/71b2efb7-b5fd-4325-853f-854b750953ea" alt="image" width="600"/>
+
+
 ## Introduction
 
 Immerse yourself in the timeless joy of the classic Flappy Bird game, enhanced with the presence of an intelligent AI that autonomously navigates the challenges.
@@ -28,7 +29,22 @@ To get started with the Chess Game, follow these simple steps:
 - Observe the AI in action by executing 'AI.py'.
     
 ## Screenshots
+### GamePlay
+<br>
+<img src="https://github.com/ankursinghbisht/Flappy-Bird-AI/assets/112644477/de8a383b-861d-4fa6-a5b7-03ca91b9d57d" alt="image" width="300"/>
 
+
+<br>
+
+### AI training
+<br>
+<img src="https://github.com/ankursinghbisht/Flappy-Bird-AI/assets/112644477/1be44384-c104-4c89-854e-badd49167670" alt="image" width="300"/>
+
+<br>
+
+### Final Bird
+<br>
+<img src="https://github.com/ankursinghbisht/Flappy-Bird-AI/assets/112644477/567a31f8-2243-48e0-a616-2b98c0ca0cfa" alt="image" width="300"/>
 
 
 ## 🔗 Links
